@@ -1,6 +1,7 @@
 npm i prisma 
 npx prisma init;
 npx prisma migrate dev --name init;
+npx prisma migrate dev --name update;
 npx prisma generate;
 npx prisma studio;
 

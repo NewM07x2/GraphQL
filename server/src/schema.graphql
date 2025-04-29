@@ -1,12 +1,18 @@
 type Query {
   info: String!
-  feed: [Link]!
+  feed: [Link, User]!
 }
 
 type Link {
   id: ID!
   description: String!
   url: String
+}
+
+type User {
+  id: ID!
+  name: String!
+  age: Int!
 }
 
 type Mutation {
