@@ -1,6 +1,7 @@
-type Query {
-  info: String!
-  feed: [Link, User]!
+# 型定義
+type Note {
+  id: ID!
+  memo: String!
 }
 
 type Link {
@@ -14,7 +15,20 @@ type User {
   name: String!
   age: Int!
 }
+# --------------------
 
+# GraphQLスキーマの定義
+type Query {
+  message: String!
+  note: [Note]!
+  # 以下実行クエリを定義
+}
+
+
+# 実行関数を定義
 type Mutation {
-  post(url: String!, description: String!): Link!
+  insert(memo: String!): Note!
+  # 以下実行関数を定義(リゾルバに記載記載されている内容に合わせる)
+  update(id: ID!, memo: String!): Note!
+  delete(id: ID!): Note!
 }

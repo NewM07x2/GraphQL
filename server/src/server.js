@@ -1,35 +1,12 @@
 const { ApolloServer, gql } = require('apollo-server');
 const fs = require('fs');
 const path = require('path');
+
 const currentDir = path.resolve();
 console.log(currentDir);
 
 const { PrismaClient } = require('@prisma/client'); // PrismaClientをインポート
 const prisma = new PrismaClient(); // PrismaClientのインスタンスを生成
-
-
-// GraphQLスキーマの定義
-// const typeDefs = require('./schema');
-// const resolvers = require('./resolvers'); // Import resolvers
-
-// let links = [
-//   {
-//     id: 'link-0',
-//     url: 'www.howtographql.com',
-//     description: 'Fullstack tutorial for GraphQL',
-//   },
-// ];
-
-
-/*
-GraphQLスキーマを定義するためのものです。typeDefsという定数に、GraphQLのスキーマ定義言語（SDL）を使用してスキーマを定義しています。
-スキーマの中で、Queryという型を定義しています。この型には、helloというフィールドが含まれており、そのフィールドのデータ型はStringです。
-つまり、このスキーマに基づいてクエリを実行すると、helloフィールドから文字列データを取得できることを示しています。
-
-このようにして、GraphQLサーバーに対してどのようなクエリが可能かを定義することができます。
-typeDefsは通常、GraphQLサーバーの設定の一部として使用され、サーバーがクライアントからのクエリをどのように処理するかを決定します。
-*/ 
-// const typeDefs = gql``;
 
 /*
   リゾルバ関数
@@ -38,23 +15,35 @@ typeDefsは通常、GraphQLサーバーの設定の一部として使用され�
 const resolvers = {
   // クエリを処理するためのメソッド
   Query: {
-    info: () => 'Hello world!',
-    feed: async (parent, args, context) => {
-      return context.prisma.user.findMany();
+    message: () => 'Hello world!',
+    note: async (parent, args, context) => {
+      return context.prisma.note.findMany();
     }
   },
 
   // 情報を登録/更新/削除するためのメソッド
   Mutation: {
-    post: (parent, args, context) => {
-      const newUser = context.prisma.user.create({
+    insert: (parent, args, context) => {
+      const newNote = context.prisma.note.create({
         data: {
-          email: args.email,
-          password: args.password,
+          memo: args.memo
         },
       });
-      return newUser;
-    }
+      return newNote;
+    },
+    update: (parent, args, context) => {
+      const updatedNote = context.prisma.note.update({
+        where: { id: args.id },
+        data: { memo: args.memo },
+      });
+      return updatedNote;
+    },
+    delete: (parent, args, context) => {
+      const deletedNote = context.prisma.note.delete({
+        where: { id: args.id },
+      });
+      return deletedNote;
+    },
   }
 };
 
@@ -64,6 +53,10 @@ const server = new ApolloServer({
     'utf8'
   ),
   resolvers,
+  cors: {
+    origin: '*', // 必要に応じて特定のオリジンを指定
+    credentials: true,
+  },
   context: {
     prisma,
   },

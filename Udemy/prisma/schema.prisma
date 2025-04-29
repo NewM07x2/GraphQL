@@ -14,9 +14,9 @@ datasource db {
 }
 
 model note {
-  id        Int    @id @default(autoincrement()) // 自動インクリメントの数値型に変更
-  memo      String
-  status    Int
+  id        String   @id @default(uuid())
+  name      String    
+  age       Int       @default(0)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -26,4 +26,3 @@ model User {
   name      String    
   age       Int       @default(0)
 }
-
