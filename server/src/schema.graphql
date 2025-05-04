@@ -21,6 +21,7 @@ type User {
 type Query {
   message: String!
   note: [Note]!
+  user: [User]!
   # 以下実行クエリを定義
 }
 

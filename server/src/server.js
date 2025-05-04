@@ -18,6 +18,9 @@ const resolvers = {
     message: () => 'Hello world!',
     note: async (parent, args, context) => {
       return context.prisma.note.findMany();
+    },
+    user: async (parent, args, context) => {
+      return context.prisma.user.findMany();
     }
   },
 
